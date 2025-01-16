@@ -4,7 +4,7 @@
   "description": "My new Nuxt module",
   "repository": {
     "type": "git",
-    "url": "https://gitlab.com/miinded/nuxt-api.git"
+    "url": "git+https://gitlab.com/miinded/nuxt-api.git"
   },
   "license": "MIT",
   "type": "module",

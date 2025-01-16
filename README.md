@@ -17,12 +17,13 @@ Find and replace all on all files (CMD+SHIFT+F):
 My new Nuxt module for doing amazing things.
 
 - [✨ &nbsp;Release Notes](/CHANGELOG.md)
-<!-- - [🏀 Online playground](https://stackblitz.com/github/miinded/nuxt-api?file=playground%2Fapp.vue) -->
-<!-- - [📖 &nbsp;Documentation](https://example.com) -->
+  <!-- - [🏀 Online playground](https://stackblitz.com/gitlab/miinded/nuxt-api?file=playground%2Fapp.vue) -->
+  <!-- - [📖 &nbsp;Documentation](https://example.com) -->
 
 ## Features
 
 <!-- Highlight some of the features your module provide here -->
+
 - ⛰ &nbsp;Foo
 - 🚠 &nbsp;Bar
 - 🌲 &nbsp;Baz
@@ -31,12 +32,20 @@ My new Nuxt module for doing amazing things.
 
 Install the module to your Nuxt application with one command:
 
+Add in uncommitted .npmrc
+
+```
+@miinded:registry=https://gitlab.com/api/v4/packages/npm/
+//gitlab.com/api/v4/packages/npm/:_authToken=<MiindedToken>
+```
+
+and install with :
+
 ```bash
-npx nuxi@latest module add nuxt-api
+npx nuxi@latest module add @miinded/nuxt-api
 ```
 
 That's it! You can now use Miinded api in your Nuxt app ✨
-
 
 ## Contribution
 
@@ -69,16 +78,13 @@ That's it! You can now use Miinded api in your Nuxt app ✨
 
 </details>
 
-
 <!-- Badges -->
-[npm-version-src]: https://img.shields.io/npm/v/nuxt-api/latest.svg?style=flat&colorA=020420&colorB=00DC82
-[npm-version-href]: https://npmjs.com/package/nuxt-api
 
+[npm-version-src]: https://img.shields.io/npm/v/@miinded/nuxt-api/latest.svg?style=flat&colorA=020420&colorB=00DC82
+[npm-version-href]: https://npmjs.com/package/@miinded/nuxt-api
 [npm-downloads-src]: https://img.shields.io/npm/dm/nuxt-api.svg?style=flat&colorA=020420&colorB=00DC82
-[npm-downloads-href]: https://npm.chart.dev/nuxt-api
-
-[license-src]: https://img.shields.io/npm/l/nuxt-api.svg?style=flat&colorA=020420&colorB=00DC82
-[license-href]: https://npmjs.com/package/nuxt-api
-
+[npm-downloads-href]: https://npm.chart.dev/@miinded/nuxt-api
+[license-src]: https://img.shields.io/npm/l/@miinded/nuxt-api.svg?style=flat&colorA=020420&colorB=00DC82
+[license-href]: https://npmjs.com/package/@miinded/nuxt-api
 [nuxt-src]: https://img.shields.io/badge/Nuxt-020420?logo=nuxt.js
 [nuxt-href]: https://nuxt.com
