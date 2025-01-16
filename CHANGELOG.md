@@ -1,6 +1,26 @@
 # Changelog
 
 
+## v0.0.2
+
+
+### 🚀 Enhancements
+
+- Init ([306aaba](https://gitlab.com/miinded/nuxt-api/commit/306aaba))
+- Improve configuration ([71ed12c](https://gitlab.com/miinded/nuxt-api/commit/71ed12c))
+
+### 🏡 Chore
+
+- **release:** V0.0.1 ([6e4420a](https://gitlab.com/miinded/nuxt-api/commit/6e4420a))
+- **release:** V0.0.1 ([3d53099](https://gitlab.com/miinded/nuxt-api/commit/3d53099))
+- Update some config ([3d814d9](https://gitlab.com/miinded/nuxt-api/commit/3d814d9))
+- **release:** V0.0.2 ([32df46f](https://gitlab.com/miinded/nuxt-api/commit/32df46f))
+- **release:** V0.0.1 ([589fe6a](https://gitlab.com/miinded/nuxt-api/commit/589fe6a))
+
+### ❤️ Contributors
+
+- Starker-xp <starker-xp@miinded.com>
+
 ## v0.0.1
 
 [compare changes](https://gitlab.com/miinded/nuxt-api/compare/v0.0.2...v0.0.1)
