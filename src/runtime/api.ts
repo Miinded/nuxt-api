@@ -51,7 +51,7 @@ async function run(method: string, url: string, datas?: any, options: AxiosReque
   let res = null;
   try {
     const config: RuntimeConfig = useRuntimeConfig();
-    const _url = url.match(/http?/) ? url : config.public.BACKEND_URI + url;
+    const _url = url.match(/http?/) ? url : config.public.backendUri + url;
 
     // Ajouter les paramètres d'interception pour suivre les tentatives et le nombre maximum d'essais
     const requestOptions: AxiosRequestConfig = {
