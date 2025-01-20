@@ -1,6 +1,18 @@
 # Changelog
 
 
+## v0.0.4
+
+[compare changes](https://gitlab.com/miinded/nuxt-api/compare/v0.0.3...v0.0.4)
+
+### 🚀 Enhancements
+
+- Rework commit post push ([a08e7a8](https://gitlab.com/miinded/nuxt-api/commit/a08e7a8))
+
+### ❤️ Contributors
+
+- Starker-xp <starker-xp@miinded.com>
+
 ## v0.0.3
 
 [compare changes](https://gitlab.com/miinded/nuxt-api/compare/v0.0.2...v0.0.3)
