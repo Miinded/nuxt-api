@@ -3,7 +3,6 @@ import { ref, computed } from 'vue';
 export function useApi<U = any>(baseURL: string) {
   const error = ref<string | null>(null);
   const isLoading = ref(false);
-  const isFetching = ref(false);
   const isError = ref(false);
   const statusCode = ref<number | null>(null); // Ajouter une ref pour le code d'état HTTP
 
@@ -21,7 +20,6 @@ export function useApi<U = any>(baseURL: string) {
     const data = ref<T | null>(null);
 
     isLoading.value = true;
-    isFetching.value = true;
     isError.value = false;
     statusCode.value = null;
 
@@ -56,7 +54,6 @@ export function useApi<U = any>(baseURL: string) {
         }
       }
 
-      isFetching.value = false;
       isLoading.value = false;
     }
 
@@ -75,7 +72,6 @@ export function useApi<U = any>(baseURL: string) {
       statusCode: statusCode.value,
     })),
     isLoading: computed(() => isLoading.value),
-    isFetching: computed(() => isFetching.value),
     isError: computed(() => isError.value),
     get,
     post,
