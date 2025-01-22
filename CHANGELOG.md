@@ -1,6 +1,18 @@
 # Changelog
 
 
+## v0.0.5
+
+[compare changes](https://gitlab.com/miinded/nuxt-api/compare/v0.0.4...v0.0.5)
+
+### 💅 Refactors
+
+- Remove dupplicate props ([a06c227](https://gitlab.com/miinded/nuxt-api/commit/a06c227))
+
+### ❤️ Contributors
+
+- Starker-xp <starker-xp@miinded.com>
+
 ## v0.0.4
 
 [compare changes](https://gitlab.com/miinded/nuxt-api/compare/v0.0.3...v0.0.4)
