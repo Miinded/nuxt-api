@@ -1,6 +1,18 @@
 # Changelog
 
 
+## v0.0.6
+
+[compare changes](https://gitlab.com/miinded/nuxt-api/compare/v0.0.5...v0.0.6)
+
+### 🚀 Enhancements
+
+- Rework of api management ([4270da2](https://gitlab.com/miinded/nuxt-api/commit/4270da2))
+
+### ❤️ Contributors
+
+- Starker-xp <starker-xp@miinded.com>
+
 ## v0.0.5
 
 [compare changes](https://gitlab.com/miinded/nuxt-api/compare/v0.0.4...v0.0.5)
