@@ -42,6 +42,7 @@ Add in uncommitted .npmrc
 and install with :
 
 ```bash
+npx nuxi@latest module add pinia
 npx nuxi@latest module add @miinded/nuxt-api
 ```
 
