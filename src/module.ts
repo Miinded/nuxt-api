@@ -1,7 +1,7 @@
-import { addImportsDir, addPlugin, createResolver, defineNuxtModule } from '@nuxt/kit';
+import { defineNuxtModule } from '@nuxt/kit';
 import pkg from '../package.json';
-import fs from 'fs';
-import path from 'path';
+import fs from 'node:fs';
+import path from 'node:path';
 
 export type ModuleOptions = object;
 
@@ -15,7 +15,7 @@ export default defineNuxtModule<ModuleOptions>({
     },
   },
   setup(_options: any, nuxt: any) {
-    const resolver = createResolver(import.meta.url);
+    // const resolver = createResolver(import.meta.url);
 
     // nuxt.hook('prepare:types', ({ references }: any) => {
     //   references.push({ path: resolver.resolve('./runtime/types.d.ts') });
