@@ -1,6 +1,18 @@
 # Changelog
 
 
+## v0.0.11
+
+[compare changes](https://gitlab.com/miinded/nuxt-api/compare/v0.0.10...v0.0.11)
+
+### 🩹 Fixes
+
+- On met dans dans le plugin  on verra plus tard ([69d5d3e](https://gitlab.com/miinded/nuxt-api/commit/69d5d3e))
+
+### ❤️ Contributors
+
+- Starker-xp <starker-xp@miinded.com>
+
 ## v0.0.10
 
 [compare changes](https://gitlab.com/miinded/nuxt-api/compare/v0.0.9...v0.0.10)
