@@ -1,7 +1,7 @@
 import { computed, ref, toValue, type Ref } from 'vue';
 import axios from 'axios';
 import type { UseRawMutationOptions, UseRawMutationOptionsKeys, UseRawQueryHeaders } from '../types/api-cache.type';
-import { USE_RAW_QUERY_ERROR_REFRESH_MAX, UseRawQueryOnErrorAction } from '../types/api-cache.enum';
+import { USE_RAW_QUERY_ERROR_REFRESH_MAX } from '../types/api-cache.type';
 import { apiCacheStore } from '../stores/api-cache.store';
 
 export const useRawMutation = (_options: UseRawMutationOptions) => {
@@ -57,14 +57,13 @@ export const useRawMutation = (_options: UseRawMutationOptions) => {
         if (errorCounts < USE_RAW_QUERY_ERROR_REFRESH_MAX) {
           errorCounts++;
           const action = await options.onErrorCallback(err);
-
           switch (action) {
-            case UseRawQueryOnErrorAction.REFRESH:
+            case 'REFRESH':
               await send(method, url, body, toValue(headers));
               return;
-            case UseRawQueryOnErrorAction.CANCEL:
+            case 'CANCEL':
               return;
-            case UseRawQueryOnErrorAction.NOTHING:
+            case 'NOTHING':
               break;
           }
         } else {

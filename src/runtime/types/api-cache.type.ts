@@ -1,6 +1,9 @@
 import type { AxiosError } from 'axios';
 import type { ComputedRef, Ref } from 'vue';
-import type { UseRawQueryOnErrorAction } from './api-cache.enum';
+
+export const USE_RAW_QUERY_ERROR_REFRESH_MAX = 3;
+
+export type UseRawQueryOnErrorAction = 'REFRESH' | 'CANCEL' | 'NOTHING';
 
 export type ApiCacheState = 'loading' | 'idle' | 'error' | 'deleted';
 
@@ -24,7 +27,7 @@ export type UseBaseOptions = {
   minDelay?: number;
   cacheDuration?: number;
   authToken?: UseRawQueryHeaders | Ref<UseRawQueryHeaders> | ComputedRef<UseRawQueryHeaders>;
-  onErrorCallback?: (error: AxiosError) => Promise<UseRawQueryOnErrorActionType>;
+  onErrorCallback?: (error: AxiosError) => Promise<UseRawQueryOnErrorAction>;
 };
 
 export type UseRawQueryHeaders = { [key: string]: string };
@@ -45,5 +48,3 @@ export type UseRawMutationOptionsKeys = keyof UseRawMutationOptions;
 export type UseMutationOptions = Pick<UseRawMutationOptions, 'minDelay' | 'cacheDuration' | 'authToken' | 'onErrorCallback'>;
 
 export type UseQueryOptions<T> = Pick<UseRawQueryOptions<T>, 'fetchOnMount' | 'minDelay' | 'cacheDuration' | 'authToken' | 'headers' | 'onErrorCallback'>;
-
-export type UseRawQueryOnErrorActionType = keyof typeof UseRawQueryOnErrorAction;

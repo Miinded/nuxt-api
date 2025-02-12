@@ -2,7 +2,7 @@ import { computed, onMounted, ref, toValue, watch, type ComputedRef, type Ref } 
 import axios, { type AxiosHeaders } from 'axios';
 import { storeToRefs } from 'pinia';
 import type { UseRawQueryOptions, UseRawQueryOptionsKeys } from '../types/api-cache.type';
-import { USE_RAW_QUERY_ERROR_REFRESH_MAX, UseRawQueryOnErrorAction } from '../types/api-cache.enum';
+import { USE_RAW_QUERY_ERROR_REFRESH_MAX } from '../types/api-cache.type';
 import { apiCacheStore } from '../stores/api-cache.store';
 
 export const useRawQuery = <T>(_options: UseRawQueryOptions<T>) => {
@@ -83,12 +83,12 @@ export const useRawQuery = <T>(_options: UseRawQueryOptions<T>) => {
           const action = await options.onErrorCallback(err);
 
           switch (action) {
-            case UseRawQueryOnErrorAction.REFRESH:
+            case 'REFRESH':
               await send();
               return;
-            case UseRawQueryOnErrorAction.CANCEL:
+            case 'CANCEL':
               return;
-            case UseRawQueryOnErrorAction.NOTHING:
+            case 'NOTHING':
               break;
           }
         } else {
