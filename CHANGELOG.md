@@ -1,6 +1,18 @@
 # Changelog
 
 
+## v0.0.10
+
+[compare changes](https://gitlab.com/miinded/nuxt-api/compare/v0.0.9...v0.0.10)
+
+### 🩹 Fixes
+
+- Add utils forlder ([5d436ab](https://gitlab.com/miinded/nuxt-api/commit/5d436ab))
+
+### ❤️ Contributors
+
+- Starker-xp <starker-xp@miinded.com>
+
 ## v0.0.9
 
 [compare changes](https://gitlab.com/miinded/nuxt-api/compare/v0.0.8...v0.0.9)
