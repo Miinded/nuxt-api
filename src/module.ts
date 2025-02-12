@@ -1,7 +1,7 @@
 import { addImportsDir, addPlugin, addTypeTemplate, createResolver, defineNuxtModule } from '@nuxt/kit';
 import pkg from '../package.json';
 
-export { UseRawQueryOnErrorAction } from './runtime/types/api-cache.type';
+export * from './runtime/types/api-cache.enum';
 export * from './runtime/types/api-cache.type';
 export interface ModuleOptions {
   enableLogs: boolean;
@@ -40,11 +40,6 @@ export default defineNuxtModule<ModuleOptions>({
     export {};
     `,
     });
-
-    // nuxt.hook('prepare:types', ({ references }: any) => {
-    //   references.push({ path: resolver.resolve('./runtime/types.d.ts') });
-    //   references.push({ path: resolver.resolve('./runtime/types/cache.ts') });
-    // });
 
     nuxt.hook('ready', () => {
       if (nuxt.options.dev) {
