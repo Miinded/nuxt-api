@@ -1,6 +1,18 @@
 # Changelog
 
 
+## v0.0.12
+
+[compare changes](https://gitlab.com/miinded/nuxt-api/compare/v0.0.11...v0.0.12)
+
+### 🩹 Fixes
+
+- Try debug export methods for external module development ([7fdf862](https://gitlab.com/miinded/nuxt-api/commit/7fdf862))
+
+### ❤️ Contributors
+
+- Starker-xp <starker-xp@miinded.com>
+
 ## v0.0.11
 
 [compare changes](https://gitlab.com/miinded/nuxt-api/compare/v0.0.10...v0.0.11)
