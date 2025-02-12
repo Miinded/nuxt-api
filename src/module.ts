@@ -1,5 +1,7 @@
 import { addImportsDir, addPlugin, addTypeTemplate, createResolver, defineNuxtModule } from '@nuxt/kit';
 import pkg from '../package.json';
+
+export { UseRawQueryOnErrorAction } from './runtime/types/api-cache.type';
 export * from './runtime/types/api-cache.type';
 export interface ModuleOptions {
   enableLogs: boolean;
