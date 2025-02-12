@@ -1,11 +1,11 @@
 import { computed, onMounted, ref, toValue, watch, type ComputedRef, type Ref } from 'vue';
 import axios, { type AxiosHeaders } from 'axios';
 import { storeToRefs } from 'pinia';
-import type { UseRawQueryOptions, UseRawQueryOptionsKeys } from '../types/api-cache.type';
+import type { UseRawQueryOptions, UseRawQueryOptionsKeys, UseRawQueryReturn } from '../types/api-cache.type';
 import { USE_RAW_QUERY_ERROR_REFRESH_MAX } from '../types/api-cache.type';
 import { apiCacheStore } from '../stores/api-cache.store';
 
-export const useRawQuery = <T>(_options: UseRawQueryOptions<T>) => {
+export const useRawQuery = <T>(_options: UseRawQueryOptions<T>): UseRawQueryReturn<T> => {
   const options: UseRawQueryOptions<T> = { fetchOnMount: true, minDelay: 0, headers: {}, cacheDuration: undefined, ..._options };
   const headers = computed(() => ({
     ...toValue(options.authToken),

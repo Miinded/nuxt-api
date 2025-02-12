@@ -1,10 +1,10 @@
 import { computed, ref, toValue, type Ref } from 'vue';
 import axios from 'axios';
-import type { UseRawMutationOptions, UseRawMutationOptionsKeys, UseRawQueryHeaders } from '../types/api-cache.type';
+import type { UseRawMutationOptions, UseRawMutationOptionsKeys, UseRawMutationReturn, UseRawQueryHeaders } from '../types/api-cache.type';
 import { USE_RAW_QUERY_ERROR_REFRESH_MAX } from '../types/api-cache.type';
 import { apiCacheStore } from '../stores/api-cache.store';
 
-export const useRawMutation = (_options: UseRawMutationOptions) => {
+export const useRawMutation = (_options: UseRawMutationOptions): UseRawMutationReturn => {
   const options: UseRawMutationOptions = { minDelay: 0, cacheDuration: undefined, ..._options };
   const authToken = computed(() => toValue(options.authToken ?? {}));
 

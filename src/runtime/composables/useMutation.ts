@@ -1,9 +1,9 @@
 import { useRawMutation } from '../composables/useRawMutation';
-import type { ApiCacheKey, UseMutationOptions, UseRawQueryHeaders } from '../types/api-cache.type';
+import type { ApiCacheKey, UseMutationOptions, UseMutationReturn, UseRawQueryHeaders } from '../types/api-cache.type';
 import type { RuntimeConfig } from 'nuxt/schema';
 import { useRuntimeConfig } from '#imports';
 
-export const useMutation = (key: ApiCacheKey[], options: UseMutationOptions = {}) => {
+export const useMutation = (key: ApiCacheKey[], options: UseMutationOptions = {}): UseMutationReturn => {
   const config: RuntimeConfig = useRuntimeConfig();
 
   const rawMutation = useRawMutation({
