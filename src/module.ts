@@ -26,7 +26,7 @@ export default defineNuxtModule<ModuleOptions>({
 
     // Ajouter le dossier des stores au projet Nuxt
     // addImportsDir(resolver.resolve('runtime/stores'));
-    addPlugin(resolver.resolve('runtime/plugins/registerStores.ts'));
+    addPlugin(resolver.resolve('runtime/plugins/registerStores'));
 
     // Ajouter les composables au projet Nuxt
     addImportsDir(resolver.resolve('runtime/composables'));
