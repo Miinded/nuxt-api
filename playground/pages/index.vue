@@ -1,8 +1,5 @@
 <script setup lang="ts">
-const { data, refetch, isLoading } = useQuery({
-  key: ['data2'],
-  url: 'https://randomuser.me/api/',
-});
+const { data, refetch, isLoading } = useQuery('https://randomuser.me/api/', ['data2']);
 </script>
 
 <template>
@@ -13,5 +10,3 @@ const { data, refetch, isLoading } = useQuery({
     <div>{{ data }}</div>
   </div>
 </template>
-
-<style scoped></style>

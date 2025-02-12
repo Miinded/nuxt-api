@@ -1,4 +1,7 @@
+import type { AxiosError } from 'axios';
 import type { ComputedRef, Ref } from 'vue';
+
+export const USE_RAW_QUERY_ERROR_REFRESH_MAX = 3;
 
 export type ApiCacheState = 'loading' | 'idle' | 'error' | 'deleted';
 
@@ -21,13 +24,31 @@ export type UseBaseOptions = {
   key: ApiCacheKey[];
   minDelay?: number;
   cacheDuration?: number;
+  authToken?: UseRawQueryHeaders | Ref<UseRawQueryHeaders> | ComputedRef<UseRawQueryHeaders>;
+  onErrorCallback?: (error: AxiosError) => Promise<UseRawQueryOnErrorAction>;
 };
 
-export type UseMutationOptions = UseBaseOptions;
+export type UseRawQueryHeaders = { [key: string]: string };
 
-export type UseQueryOptions<T> = UseBaseOptions & {
-  url: string | ComputedRef<string> | Ref<string>;
+export type UseRawQueryOptions<T> = UseBaseOptions & {
+  url: string | Ref<string> | ComputedRef<string>;
   fetchOnMount?: boolean;
   initialValue?: T;
-  headers?: Record<string, string>; // Configuration des headers
+  headers?: UseRawQueryHeaders | Ref<UseRawQueryHeaders> | ComputedRef<UseRawQueryHeaders>;
 };
+
+export type UseRawQueryOptionsKeys<T> = keyof UseRawQueryOptions<T>;
+
+export enum UseRawQueryOnErrorAction {
+  REFRESH = 'REFRESH',
+  CANCEL = 'CANCEL',
+  NOTHING = 'NOTHING',
+}
+
+export type UseRawMutationOptions = UseBaseOptions;
+
+export type UseRawMutationOptionsKeys = keyof UseRawMutationOptions;
+
+export type UseMutationOptions = Pick<UseRawMutationOptions, 'minDelay' | 'cacheDuration' | 'authToken' | 'onErrorCallback'>;
+
+export type UseQueryOptions<T> = Pick<UseRawQueryOptions<T>, 'fetchOnMount' | 'minDelay' | 'cacheDuration' | 'authToken' | 'headers' | 'onErrorCallback'>;

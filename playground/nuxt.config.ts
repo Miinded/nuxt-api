@@ -7,4 +7,7 @@ export default defineNuxtConfig({
       BACKEND_URI: 'https://66aa4426613eced4eba83c35.mockapi.io',
     },
   },
+  miindedApi: {
+    enableLogs: false,
+  },
 });
