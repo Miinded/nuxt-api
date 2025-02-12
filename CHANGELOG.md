@@ -1,6 +1,31 @@
 # Changelog
 
 
+## v0.0.8
+
+[compare changes](https://gitlab.com/miinded/nuxt-api/compare/v0.0.7...v0.0.8)
+
+### 🚀 Enhancements
+
+- Installation du module avec configuration d'un store pinia externe ([141caa1](https://gitlab.com/miinded/nuxt-api/commit/141caa1))
+
+### 🩹 Fixes
+
+- Eslint ([b0c38c4](https://gitlab.com/miinded/nuxt-api/commit/b0c38c4))
+
+### 💅 Refactors
+
+- Update system ([104b6da](https://gitlab.com/miinded/nuxt-api/commit/104b6da))
+
+### 🏡 Chore
+
+- Update deps ([44cd385](https://gitlab.com/miinded/nuxt-api/commit/44cd385))
+- How work on another project ([d687147](https://gitlab.com/miinded/nuxt-api/commit/d687147))
+
+### ❤️ Contributors
+
+- Starker-xp <starker-xp@miinded.com>
+
 ## v0.0.7
 
 [compare changes](https://gitlab.com/miinded/nuxt-api/compare/v0.0.6...v0.0.7)
