@@ -1,6 +1,18 @@
 # Changelog
 
 
+## v0.0.16
+
+[compare changes](https://gitlab.com/miinded/nuxt-api/compare/v0.0.15...v0.0.16)
+
+### 🩹 Fixes
+
+- Add type ([5d86b3d](https://gitlab.com/miinded/nuxt-api/commit/5d86b3d))
+
+### ❤️ Contributors
+
+- Starker-xp <starker-xp@miinded.com>
+
 ## v0.0.15
 
 [compare changes](https://gitlab.com/miinded/nuxt-api/compare/v0.0.14...v0.0.15)
