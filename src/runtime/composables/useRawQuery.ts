@@ -1,8 +1,8 @@
 import { computed, onMounted, ref, toValue, watch, type ComputedRef, type Ref } from 'vue';
 import axios, { type AxiosHeaders } from 'axios';
 import { storeToRefs } from 'pinia';
-import type { UseRawQueryOptions, UseRawQueryOptionsKeys } from '../types/api-cache';
-import { USE_RAW_QUERY_ERROR_REFRESH_MAX, UseRawQueryOnErrorAction } from '../types/api-cache';
+import type { UseRawQueryOptions, UseRawQueryOptionsKeys } from '../types/api-cache.type';
+import { USE_RAW_QUERY_ERROR_REFRESH_MAX, UseRawQueryOnErrorAction } from '../types/api-cache.type';
 import { apiCacheStore } from '../stores/api-cache.store';
 
 export const useRawQuery = <T>(_options: UseRawQueryOptions<T>) => {

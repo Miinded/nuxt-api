@@ -1,5 +1,5 @@
 import { useRawMutation } from '../composables/useRawMutation';
-import type { ApiCacheKey, UseMutationOptions, UseRawQueryHeaders } from '../types/api-cache';
+import type { ApiCacheKey, UseMutationOptions, UseRawQueryHeaders } from '../types/api-cache.type';
 import type { RuntimeConfig } from 'nuxt/schema';
 import { useRuntimeConfig } from '#imports';
 

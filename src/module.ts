@@ -1,6 +1,6 @@
-import { addImportsDir, addPlugin, createResolver, defineNuxtModule } from '@nuxt/kit';
+import { addImportsDir, addPlugin, addTypeTemplate, createResolver, defineNuxtModule } from '@nuxt/kit';
 import pkg from '../package.json';
-
+export * from './runtime/types/api-cache.type';
 export interface ModuleOptions {
   enableLogs: boolean;
 }
@@ -23,11 +23,21 @@ export default defineNuxtModule<ModuleOptions>({
     nuxt.options.runtimeConfig.public.miindedApi = options;
 
     // Ajouter le dossier des stores au projet Nuxt
-    // addImportsDir(resolver.resolve('runtime/stores'));
+
     addPlugin(resolver.resolve('runtime/plugins/registerStores'));
 
     // Ajouter les composables au projet Nuxt
     addImportsDir(resolver.resolve('runtime/composables'));
+
+    addTypeTemplate({
+      filename: 'types/miinded-api.d.ts',
+      getContents: () => `
+    declare module '#imports' {
+      export * from '${resolver.resolve('./runtime/composables')}';
+    }
+    export {};
+    `,
+    });
 
     // nuxt.hook('prepare:types', ({ references }: any) => {
     //   references.push({ path: resolver.resolve('./runtime/types.d.ts') });

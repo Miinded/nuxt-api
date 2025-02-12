@@ -1,7 +1,7 @@
 import { computed, ref, toValue, type Ref } from 'vue';
 import axios from 'axios';
-import type { UseRawMutationOptions, UseRawMutationOptionsKeys, UseRawQueryHeaders } from '../types/api-cache';
-import { USE_RAW_QUERY_ERROR_REFRESH_MAX, UseRawQueryOnErrorAction } from '../types/api-cache';
+import type { UseRawMutationOptions, UseRawMutationOptionsKeys, UseRawQueryHeaders } from '../types/api-cache.type';
+import { USE_RAW_QUERY_ERROR_REFRESH_MAX, UseRawQueryOnErrorAction } from '../types/api-cache.type';
 import { apiCacheStore } from '../stores/api-cache.store';
 
 export const useRawMutation = (_options: UseRawMutationOptions) => {

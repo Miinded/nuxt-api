@@ -1,6 +1,6 @@
 import { computed, toValue, type ComputedRef, type Ref } from 'vue';
 import { useRawQuery } from '../composables/useRawQuery';
-import type { UseQueryOptions } from '../types/api-cache';
+import type { UseQueryOptions } from '../types/api-cache.type';
 // import type { RuntimeConfig } from 'nuxt/schema';
 import { useRuntimeConfig } from '#imports';
 

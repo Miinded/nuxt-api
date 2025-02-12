@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia';
 import { ref, toValue, type Ref } from 'vue';
-import type { ApiCache, ApiCacheInvalidOptions, ApiCacheKey, ApiCacheState } from '../types/api-cache';
+import type { ApiCache, ApiCacheInvalidOptions, ApiCacheKey, ApiCacheState } from '../types/api-cache.type';
 
 const API_CACHE_INVALIDATE_DURATION = 30 * 1000; //30s
 const JOIN_STRING = '_:_';
