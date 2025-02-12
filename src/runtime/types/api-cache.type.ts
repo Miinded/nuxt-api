@@ -23,33 +23,28 @@ export type ApiCache = {
   state: ApiCacheState;
 };
 
-export type ApiCacheStore = Store<'api-cache'>;
+export type ApiCacheStore = Store<'api-cache'> & {
+  /** Construit une clé unique à partir d'une liste de clés */
+  buildKey: (key: ApiCacheKey[]) => string;
 
-//  {
-//   /** Référence réactive contenant le cache des requêtes */
-//   refCache: Ref<{ [key: string]: ApiCache }>;
+  /** Vérifie si une entrée existe dans le cache */
+  exist: (key: ApiCacheKey[]) => boolean;
 
-//   /** Construit une clé unique à partir d'une liste de clés */
-//   buildKey: (key: ApiCacheKey[]) => string;
+  /** Vérifie si une entrée a été supprimée */
+  isDeleted: (key: ApiCacheKey[]) => boolean;
 
-//   /** Vérifie si une entrée existe dans le cache */
-//   exist: (key: ApiCacheKey[]) => boolean;
+  /** Vérifie si une entrée est toujours valide */
+  isValid: (key: ApiCacheKey[]) => boolean;
 
-//   /** Vérifie si une entrée a été supprimée */
-//   isDeleted: (key: ApiCacheKey[]) => boolean;
+  /** Met à jour une entrée du cache */
+  update: (key: ApiCacheKey[], data: any, state: ApiCacheState, duration?: number) => void;
 
-//   /** Vérifie si une entrée est toujours valide */
-//   isValid: (key: ApiCacheKey[]) => boolean;
+  /** Rend une entrée invalide (avec options pour invalider les enfants) */
+  invalid: (key: ApiCacheKey[], options?: ApiCacheInvalidOptions) => void;
 
-//   /** Met à jour une entrée du cache */
-//   update: (key: ApiCacheKey[], data: any, state: ApiCacheState, duration?: number) => void;
-
-//   /** Rend une entrée invalide (avec options pour invalider les enfants) */
-//   invalid: (key: ApiCacheKey[], options?: ApiCacheInvalidOptions) => void;
-
-//   /** Supprime (ou marque comme supprimée) une entrée du cache */
-//   remove: (key: ApiCacheKey[]) => void;
-// };
+  /** Supprime (ou marque comme supprimée) une entrée du cache */
+  remove: (key: ApiCacheKey[]) => void;
+};
 
 export type UseBaseOptions = {
   key: ApiCacheKey[];
