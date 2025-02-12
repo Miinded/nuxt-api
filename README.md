@@ -79,6 +79,45 @@ That's it! You can now use Miinded api in your Nuxt app ✨
 
 </details>
 
+<details>
+  <summary>Installé sur un autre projet development</summary>
+
+On commence dans le module en cours de jouer la commande :
+
+```bash
+npm link
+```
+
+Ensuite on peut lancer le mode dev du module en cours :
+
+```bash
+npm run dev
+```
+
+Dans le projet de dev on va devoir supprimer l'installation dans node_modules si elle existe :
+
+```bash
+rm node_modules/@miinded/nuxt-api
+```
+
+Puis de lier le projet :
+
+```bash
+npm link @miinded/nuxt-api
+```
+
+Dans le projet distant exemple `nuxt3-package`
+
+```bash
+npm run dev
+```
+
+Dès qu'on fait une modification dans le module externe il faudra relancer la commande précédente dans le projet final.
+
+Dans certains cas, notamment avec des interfaces ou configuration il faudra rejouer `npm link @miinded/nuxt-api` mais, c'est à mon avis un projet de compréhension de ma part.
+
+</details>
+
 <!-- Badges -->
 
 [npm-version-src]: https://img.shields.io/npm/v/@miinded/nuxt-api/latest.svg?style=flat&colorA=020420&colorB=00DC82
