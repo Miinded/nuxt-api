@@ -1,6 +1,18 @@
 # Changelog
 
 
+## v0.0.13
+
+[compare changes](https://gitlab.com/miinded/nuxt-api/compare/v0.0.12...v0.0.13)
+
+### 🚀 Enhancements
+
+- Debug export enum ([88edbf9](https://gitlab.com/miinded/nuxt-api/commit/88edbf9))
+
+### ❤️ Contributors
+
+- Starker-xp <starker-xp@miinded.com>
+
 ## v0.0.12
 
 [compare changes](https://gitlab.com/miinded/nuxt-api/compare/v0.0.11...v0.0.12)
