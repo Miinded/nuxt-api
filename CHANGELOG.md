@@ -1,6 +1,18 @@
 # Changelog
 
 
+## v0.0.15
+
+[compare changes](https://gitlab.com/miinded/nuxt-api/compare/v0.0.14...v0.0.15)
+
+### 🩹 Fixes
+
+- Debug ([aa170e0](https://gitlab.com/miinded/nuxt-api/commit/aa170e0))
+
+### ❤️ Contributors
+
+- Starker-xp <starker-xp@miinded.com>
+
 ## v0.0.14
 
 [compare changes](https://gitlab.com/miinded/nuxt-api/compare/v0.0.13...v0.0.14)
