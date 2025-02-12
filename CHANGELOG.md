@@ -1,6 +1,18 @@
 # Changelog
 
 
+## v0.0.9
+
+[compare changes](https://gitlab.com/miinded/nuxt-api/compare/v0.0.8...v0.0.9)
+
+### 🩹 Fixes
+
+- Il ne faut pas mettre l'extension ([a996974](https://gitlab.com/miinded/nuxt-api/commit/a996974))
+
+### ❤️ Contributors
+
+- Starker-xp <starker-xp@miinded.com>
+
 ## v0.0.8
 
 [compare changes](https://gitlab.com/miinded/nuxt-api/compare/v0.0.7...v0.0.8)
