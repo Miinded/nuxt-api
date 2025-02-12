@@ -1,9 +1,20 @@
+import pkg from '../../../package.json';
 import { defineNuxtPlugin } from '#app';
 import { createPinia, setActivePinia, type Pinia } from 'pinia';
+import { useRuntimeConfig } from '#imports';
 
 // Importer les stores à enregistrer
 import { apiCacheStore } from '../stores/api-cache.store';
-import { log } from '../../utils/logger';
+
+export const log = (message: string) => {
+  const config = useRuntimeConfig();
+
+  const { enableLogs } = config.public.miindedApi || { enableLogs: false };
+
+  if (enableLogs) {
+    console.log(`[${pkg.name}] ${message}`);
+  }
+};
 
 export default defineNuxtPlugin((nuxtApp) => {
   let pinia: Pinia;

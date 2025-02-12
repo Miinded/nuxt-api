@@ -1,7 +1,5 @@
 import { addImportsDir, addPlugin, createResolver, defineNuxtModule } from '@nuxt/kit';
 import pkg from '../package.json';
-// import fs from 'node:fs';
-// import path from 'node:path';
 
 export interface ModuleOptions {
   enableLogs: boolean;

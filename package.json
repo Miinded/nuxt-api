@@ -19,8 +19,7 @@
   "types": "./dist/types.d.ts",
   "files": [
     "dist",
-    "src/runtime/**/*",
-    "src/utils/**/*"
+    "src/runtime/**/*"
   ],
   "scripts": {
     "prepack": "nuxt-module-build build",
