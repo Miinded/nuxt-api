@@ -1,7 +1,7 @@
 import { addImportsDir, addPlugin, addTypeTemplate, createResolver, defineNuxtModule } from '@nuxt/kit';
 import pkg from '../package.json';
 
-export * from './runtime/types/api-cache.type';
+export * from './runtime/types/api-cache';
 export interface ModuleOptions {
   enableLogs: boolean;
 }
