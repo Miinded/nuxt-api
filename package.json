@@ -1,6 +1,6 @@
 {
   "name": "@miinded/nuxt-api",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "My new Nuxt module",
   "repository": {
     "type": "git",
@@ -10,13 +10,12 @@
   "type": "module",
   "exports": {
     ".": {
-      "types": "./dist/types.d.ts",
-      "import": "./dist/module.mjs",
-      "require": "./dist/module.cjs"
+      "types": "./dist/types.d.mts",
+      "import": "./dist/module.mjs"
     }
   },
-  "main": "./dist/module.cjs",
-  "types": "./dist/types.d.ts",
+  "main": "./dist/module.mjs",
+  "types": "./dist/types.d.mts",
   "files": [
     "dist",
     "src/runtime/**/*"

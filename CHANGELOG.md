@@ -1,6 +1,19 @@
 # Changelog
 
 
+## v0.1.1
+
+[compare changes](https://gitlab.com/miinded/nuxt-api/compare/v0.1.0...v0.1.1)
+
+### 🩹 Fixes
+
+- Corrige export des types pour build Nuxt module ([ed2f3b7](https://gitlab.com/miinded/nuxt-api/commit/ed2f3b7))
+- Ajoute ré-export types runtime (api-cache.ts) pour résolution Rollup ([8930641](https://gitlab.com/miinded/nuxt-api/commit/8930641))
+
+### ❤️ Contributors
+
+- Starker-xp <starker-xp@miinded.com>
+
 ## v0.1.0
 
 [compare changes](https://gitlab.com/miinded/nuxt-api/compare/v0.0.17...v0.1.0)
