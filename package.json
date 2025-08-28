@@ -28,28 +28,28 @@
     "dev:prepare": "nuxt-module-build build --stub && nuxt-module-build prepare && nuxi prepare playground",
     "release": "npm run lint && npm run prepack && changelogen --release && npm publish && git push --follow-tags",
     "lint": "eslint .",
-    "test": "vitest run",
-    "test:watch": "vitest watch",
+    "test": "vitest run --reporter=default",
+    "test:watch": "vitest watch --reporter=default",
     "test:types": "vue-tsc --noEmit && cd playground && vue-tsc --noEmit"
   },
   "dependencies": {
-    "@nuxt/kit": "^3.15.4",
-    "@pinia/nuxt": "^0.10.0",
-    "axios": "^1.7.9",
-    "pinia": "^3.0.0"
+    "@nuxt/kit": "^4.0.3",
+    "@pinia/nuxt": "^0.11.2",
+    "axios": "^1.11.0",
+    "pinia": "^3.0.3"
   },
   "devDependencies": {
-    "@nuxt/devtools": "^2.0.0",
-    "@nuxt/eslint-config": "^1.0.1",
-    "@nuxt/module-builder": "^0.8.4",
-    "@nuxt/schema": "^3.15.4",
-    "@nuxt/test-utils": "^3.15.4",
-    "@types/node": "latest",
-    "changelogen": "^0.5.7",
-    "eslint": "^9.20.1",
-    "nuxt": "^3.15.4",
-    "typescript": "~5.7.3",
-    "vitest": "^3.0.5",
-    "vue-tsc": "^2.2.0"
+    "@nuxt/devtools": "^2.6.3",
+    "@nuxt/eslint-config": "^1.9.0",
+    "@nuxt/module-builder": "^1.0.2",
+    "@nuxt/schema": "^4.0.3",
+    "@nuxt/test-utils": "^3.19.2",
+    "@types/node": "^24.3.0",
+    "changelogen": "^0.6.2",
+    "eslint": "^9.34.0",
+    "nuxt": "^4.0.3",
+    "typescript": "~5.9.2",
+    "vitest": "^3.2.4",
+    "vue-tsc": "^3.0.6"
   }
 }

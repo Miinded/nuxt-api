@@ -24,20 +24,41 @@ export type ApiCache = {
 };
 
 export type ApiCacheStore = Store<'api-cache'> & {
+  /** Accès direct au cache réactif */
+  refCache: Ref<{ [key: string]: ApiCache }>;
+
   /** Construit une clé unique à partir d'une liste de clés */
   buildKey: (key: ApiCacheKey[]) => string;
 
-  /** Vérifie si une entrée existe dans le cache */
-  exist: (key: ApiCacheKey[]) => boolean;
+  /** Récupère une entrée brute du cache */
+  getEntry: (key: ApiCacheKey[]) => ApiCache | undefined;
 
-  /** Vérifie si une entrée a été supprimée */
-  isDeleted: (key: ApiCacheKey[]) => boolean;
+  /** Vérifie l'état exact d'une entrée */
+  hasState: (key: ApiCacheKey[], state: ApiCacheState) => boolean;
+
+  /** Vérifie que l'état est différent de celui fourni */
+  notState: (key: ApiCacheKey[], state: ApiCacheState) => boolean;
+
+  /** Vérifie si l'entrée est fraîche (non expirée) */
+  isFresh: (entry: ApiCache) => boolean;
 
   /** Vérifie si une entrée est toujours valide */
   isValid: (key: ApiCacheKey[]) => boolean;
 
-  /** Met à jour une entrée du cache */
-  update: (key: ApiCacheKey[], data: any, state: ApiCacheState, duration?: number) => void;
+  /** Vérifie si une entrée a été supprimée */
+  isDeleted: (key: ApiCacheKey[]) => boolean;
+
+  /** Indique si une entrée est en cours de chargement */
+  isLoading: (key: ApiCacheKey[]) => boolean;
+
+  /** Récupère une entrée (alias de getEntry) */
+  get: (key: ApiCacheKey[]) => ApiCache | undefined;
+
+  /** Vérifie si une entrée existe (et n'est pas supprimée) */
+  exist: (key: ApiCacheKey[]) => boolean;
+
+  /** Met à jour (ou crée) une entrée du cache et la retourne */
+  update: (key: ApiCacheKey[], data: any, state: ApiCacheState, duration?: number | null) => ApiCache | undefined;
 
   /** Rend une entrée invalide (avec options pour invalider les enfants) */
   invalid: (key: ApiCacheKey[], options?: ApiCacheInvalidOptions) => void;
