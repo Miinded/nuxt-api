@@ -1,6 +1,6 @@
 {
   "name": "@miinded/nuxt-api",
-  "version": "0.0.17",
+  "version": "0.1.0",
   "description": "My new Nuxt module",
   "repository": {
     "type": "git",

@@ -1,6 +1,22 @@
 # Changelog
 
 
+## v0.1.0
+
+[compare changes](https://gitlab.com/miinded/nuxt-api/compare/v0.0.17...v0.1.0)
+
+### 🚀 Enhancements
+
+- ⚠️  Migration Nuxt 4 et alignement types du store\n\nBREAKING CHANGE: passage à Nuxt 4, mise à jour des signatures de ApiCacheStore (update retourne l'entrée, ajout de méthodes: getEntry/hasState/notState/isFresh/isLoading/get) ([bed3cc9](https://gitlab.com/miinded/nuxt-api/commit/bed3cc9))
+
+#### ⚠️ Breaking Changes
+
+- ⚠️  Migration Nuxt 4 et alignement types du store\n\nBREAKING CHANGE: passage à Nuxt 4, mise à jour des signatures de ApiCacheStore (update retourne l'entrée, ajout de méthodes: getEntry/hasState/notState/isFresh/isLoading/get) ([bed3cc9](https://gitlab.com/miinded/nuxt-api/commit/bed3cc9))
+
+### ❤️ Contributors
+
+- Starker-xp <starker-xp@miinded.com>
+
 ## v0.0.17
 
 [compare changes](https://gitlab.com/miinded/nuxt-api/compare/v0.0.16...v0.0.17)
