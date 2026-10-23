@@ -1,130 +1,205 @@
-<!--
-Get your module up and running quickly.
+# @miinded/nuxt-api
 
-Find and replace all on all files (CMD+SHIFT+F):
-- Name: Miinded api
-- Package name: nuxt-api
-- Description: My new Nuxt module
--->
+[![npm version](https://img.shields.io/npm/v/@miinded/nuxt-api.svg)](https://www.npmjs.com/package/@miinded/nuxt-api)
+[![license](https://img.shields.io/npm/l/@miinded/nuxt-api.svg)](./LICENSE)
+[![Quality](https://github.com/Miinded/nuxt-api/actions/workflows/quality.yml/badge.svg)](https://github.com/Miinded/nuxt-api/actions/workflows/quality.yml)
+[![codecov](https://codecov.io/gh/Miinded/nuxt-api/graph/badge.svg)](https://codecov.io/gh/Miinded/nuxt-api)
+[![Nuxt](https://img.shields.io/badge/Nuxt-4-00DC82?logo=nuxt.js)](https://nuxt.com)
 
-# Miinded api
+A [Nuxt](https://nuxt.com) module that provides typed composables to **query and mutate a REST API** with a shared,
+reactive request cache backed by [Pinia](https://pinia.vuejs.org).
 
-[![npm version][npm-version-src]][npm-version-href]
-[![npm downloads][npm-downloads-src]][npm-downloads-href]
-[![License][license-src]][license-href]
-[![Nuxt][nuxt-src]][nuxt-href]
-
-My new Nuxt module for doing amazing things.
-
-- [✨ &nbsp;Release Notes](/CHANGELOG.md)
-  <!-- - [🏀 Online playground](https://stackblitz.com/gitlab/miinded/nuxt-api?file=playground%2Fapp.vue) -->
-  <!-- - [📖 &nbsp;Documentation](https://example.com) -->
+Every request is stored under a **cache key**. Components that use the same key share the same data, loading and
+error state; invalidating a key (or a key prefix) refetches every mounted query that depends on it.
 
 ## Features
 
-<!-- Highlight some of the features your module provide here -->
+- `useQuery` / `useRawQuery` — GET requests with a reactive cache, fetch on mount and automatic refetch on invalidation.
+- `useMutation` / `useRawMutation` — POST, PUT, PATCH and DELETE that write their result into the cache.
+- Hierarchical cache keys (`['collection', id, 'drop']`) with exact or prefix invalidation, made of strings, numbers or
+  refs.
+- Relative URLs resolved against `runtimeConfig.public.BACKEND_URI`.
+- Error state (`isError`, `statusCode`, backend `message`), token renewal hook (`onErrorCallback`) and optional retries
+  with exponential backoff on server errors.
+- `minDelay` to avoid flashes of loading states on fast responses.
 
-- ⛰ &nbsp;Foo
-- 🚠 &nbsp;Bar
-- 🌲 &nbsp;Baz
+## Requirements
 
-## Quick Setup
+| Package | Version |
+| ------- | ------- |
+| Node.js | `>= 24` |
+| Nuxt    | `4`     |
+| Vue     | `3.5`   |
+| Pinia   | `3`     |
 
-Install the module to your Nuxt application with one command:
-
-Add in uncommitted .npmrc
-
-```
-@miinded:registry=https://gitlab.com/api/v4/packages/npm/
-//gitlab.com/api/v4/packages/npm/:_authToken=<MiindedToken>
-```
-
-and install with :
-
-```bash
-npx nuxi@latest module add pinia
-npx nuxi@latest module add @miinded/nuxt-api
-```
-
-That's it! You can now use Miinded api in your Nuxt app ✨
-
-## Contribution
-
-<details>
-  <summary>Local development</summary>
-  
-  ```bash
-  # Install dependencies
-  npm install
-  
-  # Generate type stubs
-  npm run dev:prepare
-  
-  # Develop with the playground
-  npm run dev
-  
-  # Build the playground
-  npm run dev:build
-  
-  # Run ESLint
-  npm run lint
-  
-  # Run Vitest
-  npm run test
-  npm run test:watch
-  
-  # Release new version
-  npm run release
-  ```
-
-</details>
-
-<details>
-  <summary>Installé sur un autre projet development</summary>
-
-On commence dans le module en cours de jouer la commande :
+## Installation
 
 ```bash
-npm link
+pnpm add @miinded/nuxt-api pinia
+# or
+npm install @miinded/nuxt-api pinia
 ```
 
-Ensuite on peut lancer le mode dev du module en cours :
+`@pinia/nuxt` is installed with the module; it must be declared in `modules` (the module refuses to start in
+development without it):
 
-```bash
-npm run dev
+```ts
+// nuxt.config.ts
+export default defineNuxtConfig({
+  modules: ['@pinia/nuxt', '@miinded/nuxt-api'],
+  runtimeConfig: {
+    public: {
+      // prefix of every relative URL given to useQuery / useMutation
+      BACKEND_URI: process.env.NUXT_PUBLIC_BACKEND_URI,
+    },
+  },
+  miindedApi: {
+    enableLogs: false, // log the module's internal steps in the console
+  },
+});
 ```
 
-Dans le projet de dev on va devoir supprimer l'installation dans node_modules si elle existe :
+The composables and the `UseRawQueryOnErrorAction` enum are auto-imported.
 
-```bash
-rm node_modules/@miinded/nuxt-api
+## Usage
+
+### Fetching data
+
+```vue
+<script setup lang="ts">
+type Collection = { id: string; name: string };
+
+const route = useRoute();
+const id = computed(() => route.params.id as string);
+
+// GET {BACKEND_URI}/collection/:id, cached under ['collection', id]
+const { data, isLoading, isError, error, refetch } = useQuery<Collection>(
+  computed(() => `/collection/${id.value}`),
+  ['collection', id],
+);
+</script>
+
+<template>
+  <p v-if="isLoading">Loading…</p>
+  <p v-else-if="isError">{{ error }}</p>
+  <h1 v-else-if="data">{{ data.name }}</h1>
+</template>
 ```
 
-Puis de lier le projet :
+`useQuery(url, key, initialValue?, options?)` fetches on mount unless the cache entry is still valid
+(`fetchOnMount: false` disables it). `data` returns `initialValue` until the first response.
 
-```bash
-npm link @miinded/nuxt-api
+### Mutating data
+
+```ts
+const { put, remove, isLoading: isSaving, isError, error } = useMutation(['collection', id]);
+
+await put(`/collection/${id.value}`, { name: 'New name' }); // response stored under ['collection', id]
+await remove(`/collection/${id.value}`); // entry marked as deleted
 ```
 
-Dans le projet distant exemple `nuxt3-package`
+`post`, `put` and `patch` take `(url, body, headers?)`; `remove` takes `(url, headers?)`.
 
-```bash
-npm run dev
+### Cache keys and invalidation
+
+```ts
+const cache = useQueryCache();
+
+cache.invalid(['collection']); // the entry and all its children (['collection', '42'], ['collection', '42', 'drop']…)
+cache.invalid(['collection'], { exact: true }); // only ['collection']
 ```
 
-Dès qu'on fait une modification dans le module externe il faudra relancer la commande précédente dans le projet final.
+Mounted queries whose entry becomes invalid refetch automatically. A cache entry expires after 30 seconds by default
+(`cacheDuration`, in milliseconds).
 
-Dans certains cas, notamment avec des interfaces ou configuration il faudra rejouer `npm link @miinded/nuxt-api` mais, c'est à mon avis un projet de compréhension de ma part.
+### Errors, token renewal and retries
 
-</details>
+```ts
+const { data } = useQuery('/me', ['me'], undefined, {
+  authToken: computed(() => ({ Authorization: `Bearer ${session.value.accessToken}` })),
 
-<!-- Badges -->
+  // called on any error, at most 3 times in a row
+  onErrorCallback: async (error) => {
+    if (error.response?.status === 401) {
+      await renewToken();
+      return UseRawQueryOnErrorAction.REFRESH; // replay the request ('REFRESH' also works)
+    }
+    return UseRawQueryOnErrorAction.NOTHING; // handle the error normally; CANCEL drops it silently
+  },
 
-[npm-version-src]: https://img.shields.io/npm/v/@miinded/nuxt-api/latest.svg?style=flat&colorA=020420&colorB=00DC82
-[npm-version-href]: https://npmjs.com/package/@miinded/nuxt-api
-[npm-downloads-src]: https://img.shields.io/npm/dm/nuxt-api.svg?style=flat&colorA=020420&colorB=00DC82
-[npm-downloads-href]: https://npm.chart.dev/@miinded/nuxt-api
-[license-src]: https://img.shields.io/npm/l/@miinded/nuxt-api.svg?style=flat&colorA=020420&colorB=00DC82
-[license-href]: https://npmjs.com/package/@miinded/nuxt-api
-[nuxt-src]: https://img.shields.io/badge/Nuxt-020420?logo=nuxt.js
-[nuxt-href]: https://nuxt.com
+  // replay network errors and HTTP 500/502/503/504, 1 s, 2 s then 4 s apart
+  retry: {
+    max: 3,
+    onRetry: (attempt, error) => console.warn(`Server unavailable, retry #${attempt}`, error.message),
+  },
+});
+```
+
+On failure, `isError` is `true`, `statusCode` holds the HTTP status (`null` for network errors) and `error` holds the
+`message` returned by the backend, or the HTTP status text.
+
+### Raw composables
+
+`useRawQuery` and `useRawMutation` are the building blocks of `useQuery` and `useMutation`: they take absolute URLs and
+do not read `BACKEND_URI`.
+
+```ts
+const query = useRawQuery<Drop>({ key: ['drop', slug], url: 'https://api.example.com/drop/poc/status' });
+const mutation = useRawMutation({ key: ['drop', slug] });
+await mutation.send('POST', 'https://api.example.com/drop', { name: 'poc' });
+```
+
+## API
+
+### Query options (`useQuery`, `useRawQuery`)
+
+| Option            | Type                                               | Default | Description                                                |
+| ----------------- | -------------------------------------------------- | ------- | ---------------------------------------------------------- |
+| `fetchOnMount`    | `boolean`                                          | `true`  | Fetch when the component mounts if the cache is stale      |
+| `minDelay`        | `number` (ms)                                      | `0`     | Minimum duration of a request                              |
+| `cacheDuration`   | `number` (ms)                                      | `30000` | Lifetime of the cache entry                                |
+| `headers`         | `Record<string, string>` or ref                    | `{}`    | Extra request headers                                      |
+| `authToken`       | `Record<string, string>` or ref                    | —       | Authorization headers, merged into every request           |
+| `onErrorCallback` | `(error) => Promise<UseRawQueryOnErrorActionType>` | —       | `REFRESH`, `CANCEL` or `NOTHING`, at most 3 in a row       |
+| `retry`           | `{ max, delay?, onRetry? }`                        | —       | Retries on server and network errors (disabled by default) |
+
+`useMutation` accepts the same options except `fetchOnMount` and `headers`.
+
+### Query return (`useQuery`, `useRawQuery`)
+
+| Property     | Type                            | Description                                                   |
+| ------------ | ------------------------------- | ------------------------------------------------------------- |
+| `data`       | `ComputedRef<T \| undefined>`   | Cached data, or `initialValue`                                |
+| `isLoading`  | `ComputedRef<boolean>`          | A request is in progress for this key                         |
+| `isError`    | `ComputedRef<boolean>`          | The last request for this key failed                          |
+| `error`      | `Ref<string \| null>`           | Message of the last error                                     |
+| `statusCode` | `Ref<number \| null>`           | HTTP status of the last error                                 |
+| `refetch`    | `() => Promise<T \| undefined>` | Send the request unconditionally                              |
+| `refresh`    | `() => Promise<void>`           | Send it only if the cache is stale and nothing is in progress |
+| `cache`      | `ApiCacheStore`                 | The shared cache store                                        |
+| `setOptions` | `(options) => void`             | Update the options of this query                              |
+
+### Mutation return (`useMutation`, `useRawMutation`)
+
+`isLoading`, `isError`, `error`, `statusCode` (refs), `cache`, `setOptions`, `send(method, url, body, headers?)`, and
+for `useMutation`: `post`, `put`, `patch`, `remove`.
+
+## Migrating from 0.x
+
+- Nuxt 4 is required; `nuxt`, `vue` and `pinia` are now **peer dependencies**.
+- `ApiCacheStore['refCache']` is typed as the plain object exposed by Pinia (it was wrongly typed as a `Ref`).
+- `UseRawQueryOnErrorAction` is an auto-imported enum; the string values (`'REFRESH'`, `'CANCEL'`, `'NOTHING'`) are
+  still accepted.
+- A URL is considered absolute only when it starts with `http://` or `https://` (any URL containing `htt` was).
+- `useRawMutation` now sets `isError` and exposes `error` and `statusCode`; `useRawQuery` exposes `error`, `statusCode`
+  and `refresh`.
+- A query mounted on a still valid cache entry now refetches when that entry is invalidated.
+- Published on npm: remove the GitLab registry lines (`@miinded:registry=…`) from your `.npmrc`.
+
+## Contributing
+
+See [CONTRIBUTING.md](./CONTRIBUTING.md).
+
+## License
+
+[MIT](./LICENSE)

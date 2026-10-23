@@ -1,5 +1,30 @@
 # Changelog
 
+## 2.0.0
+
+### Major Changes
+
+- Published on npm from [GitHub](https://github.com/Miinded/nuxt-api) instead of the GitLab registry.
+- Requires Nuxt 4 (`compatibility.nuxt >= 4.0.0`); `nuxt`, `vue` and `pinia` are peer dependencies.
+- `ApiCacheStore['refCache']` is typed as the plain object exposed by Pinia instead of a `Ref`.
+- `UseRawQueryOnErrorAction` is an enum (its string values are still accepted by `onErrorCallback`).
+- Only `http://` and `https://` URLs are treated as absolute by `useQuery` and `useMutation`.
+
+### Minor Changes
+
+- `retry` option: retries network errors and HTTP 500/502/503/504 with exponential backoff (disabled by default).
+- `useRawQuery` returns `refresh`, `error` and `statusCode`; `useRawMutation` returns `error` and `statusCode`.
+- `useQueryCache()` composable to read, update and invalidate the cache.
+- `useQuery` accepts reactive and numeric cache keys (`ApiCacheKey[]`).
+- Error messages use the `message` returned by the backend when present.
+
+### Patch Changes
+
+- `useRawMutation` sets `isError` when a request fails.
+- A query mounted on a valid cache entry now refetches when the entry is invalidated.
+- `error` is reset at the start of each request.
+
+
 
 ## v0.1.1
 
