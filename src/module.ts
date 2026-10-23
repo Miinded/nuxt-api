@@ -1,4 +1,4 @@
-import { addImportsDir, addPlugin, addTypeTemplate, createResolver, defineNuxtModule } from '@nuxt/kit';
+import { addImports, addImportsDir, addPlugin, addTypeTemplate, createResolver, defineNuxtModule } from '@nuxt/kit';
 import pkg from '../package.json';
 
 export * from './runtime/types/api-cache';
@@ -11,8 +11,7 @@ export default defineNuxtModule<ModuleOptions>({
     name: 'miinded-api',
     configKey: 'miindedApi',
     compatibility: {
-      nuxt: '>=3',
-      bridge: false,
+      nuxt: '>=4.0.0',
     },
   },
   defaults: {
@@ -29,6 +28,8 @@ export default defineNuxtModule<ModuleOptions>({
 
     // Ajouter les composables au projet Nuxt
     addImportsDir(resolver.resolve('runtime/composables'));
+    // L'enum des actions d'erreur est une valeur : auto-importée plutôt qu'importée depuis l'entrée du module
+    addImports({ name: 'UseRawQueryOnErrorAction', from: resolver.resolve('runtime/types/api-cache.type') });
 
     addTypeTemplate({
       filename: 'types/miinded-api.d.ts',
@@ -45,12 +46,16 @@ export default defineNuxtModule<ModuleOptions>({
         const hasPinia = nuxt.options.modules.includes('@pinia/nuxt') || nuxt.options.build.transpile.includes('pinia');
         if (!hasPinia) {
           // Affiche une erreur si Pinia n'est pas trouvé
-          throw new Error(`Le module "${pkg.name}" nécessite Pinia. Assurez-vous d'installer et d'ajouter "@pinia/nuxt" dans nuxt.config.ts.`);
+          throw new Error(
+            `Le module "${pkg.name}" nécessite Pinia. Assurez-vous d'installer et d'ajouter "@pinia/nuxt" dans nuxt.config.ts.`,
+          );
         }
 
         const backendUri = nuxt.options.runtimeConfig.public.BACKEND_URI;
         if (!backendUri) {
-          throw new Error(`Le module "${pkg.name}" nécessite la configuration \`BACKEND_URI\` dans \`nuxt.config.ts\`. Exemple : \`BACKEND_URI: "https://mon-backend.nftprojects.fr"\``);
+          throw new Error(
+            `Le module "${pkg.name}" nécessite la configuration \`BACKEND_URI\` dans \`nuxt.config.ts\`. Exemple : \`BACKEND_URI: "https://mon-backend.nftprojects.fr"\``,
+          );
         }
       }
     });

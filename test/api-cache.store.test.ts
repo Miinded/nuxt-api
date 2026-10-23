@@ -1,18 +1,14 @@
 import { setActivePinia, createPinia } from 'pinia';
 import { ref, computed } from 'vue';
-import { apiCacheStore, type ApiCacheKey } from '../src/runtime/stores/api-cache.store';
+import { apiCacheStore } from '../src/runtime/stores/api-cache.store';
+import type { ApiCacheKey } from '../src/runtime/types/api-cache.type';
 
 describe('api-cache.store', () => {
   beforeEach(() => {
     setActivePinia(createPinia());
   });
 
-  const makeKeys = (): ApiCacheKey[] => [
-    'users',
-    1,
-    ref('details'),
-    computed(() => 2024),
-  ];
+  const makeKeys = (): ApiCacheKey[] => ['users', 1, ref('details'), computed(() => 2024)];
 
   it('buildKey concatène correctement les clés', () => {
     const store = apiCacheStore();
@@ -62,5 +58,3 @@ describe('api-cache.store', () => {
     expect(store.exist(key)).toBe(false);
   });
 });
-
-

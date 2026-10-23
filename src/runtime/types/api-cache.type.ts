@@ -4,7 +4,28 @@ import type { ComputedRef, Ref } from 'vue';
 
 export const USE_RAW_QUERY_ERROR_REFRESH_MAX = 3;
 
-export type UseRawQueryOnErrorAction = 'REFRESH' | 'CANCEL' | 'NOTHING';
+/** Action à mener après une erreur, renvoyée par `onErrorCallback` */
+export enum UseRawQueryOnErrorAction {
+  /** Relancer la requête (ex. après un renouvellement de jeton) */
+  REFRESH = 'REFRESH',
+  /** Abandonner silencieusement : ni erreur exposée, ni état « error » dans le cache */
+  CANCEL = 'CANCEL',
+  /** Traiter l'erreur normalement */
+  NOTHING = 'NOTHING',
+}
+
+/** Valeurs acceptées par `onErrorCallback` : l'enum ou sa chaîne ('REFRESH', 'CANCEL', 'NOTHING') */
+export type UseRawQueryOnErrorActionType = UseRawQueryOnErrorAction | `${UseRawQueryOnErrorAction}`;
+
+/** Relance automatique sur erreur serveur (pas de réponse, ou HTTP 500, 502, 503, 504) */
+export type UseRetryOptions = {
+  /** Nombre maximal de relances ; 0 désactive la relance */
+  max: number;
+  /** Délai en ms avant la relance n° `attempt` (1, 2, …) ; défaut : 1 s, 2 s, 4 s, puis 4 s */
+  delay?: (attempt: number) => number;
+  /** Appelé juste avant chaque relance (notification, état « serveur indisponible »…) */
+  onRetry?: (attempt: number, error: AxiosError) => void;
+};
 
 export type ApiCacheState = 'loading' | 'idle' | 'error' | 'deleted';
 
@@ -24,8 +45,8 @@ export type ApiCache = {
 };
 
 export type ApiCacheStore = Store<'api-cache'> & {
-  /** Accès direct au cache réactif */
-  refCache: Ref<{ [key: string]: ApiCache }>;
+  /** Accès direct au cache réactif (Pinia déballe la ref sur l'instance du store) */
+  refCache: { [key: string]: ApiCache };
 
   /** Construit une clé unique à partir d'une liste de clés */
   buildKey: (key: ApiCacheKey[]) => string;
@@ -58,7 +79,7 @@ export type ApiCacheStore = Store<'api-cache'> & {
   exist: (key: ApiCacheKey[]) => boolean;
 
   /** Met à jour (ou crée) une entrée du cache et la retourne */
-  update: (key: ApiCacheKey[], data: any, state: ApiCacheState, duration?: number | null) => ApiCache | undefined;
+  update: (key: ApiCacheKey[], data: unknown, state: ApiCacheState, duration?: number | null) => ApiCache | undefined;
 
   /** Rend une entrée invalide (avec options pour invalider les enfants) */
   invalid: (key: ApiCacheKey[], options?: ApiCacheInvalidOptions) => void;
@@ -72,7 +93,9 @@ export type UseBaseOptions = {
   minDelay?: number;
   cacheDuration?: number;
   authToken?: UseRawQueryHeaders | Ref<UseRawQueryHeaders> | ComputedRef<UseRawQueryHeaders>;
-  onErrorCallback?: (error: AxiosError) => Promise<UseRawQueryOnErrorAction>;
+  onErrorCallback?: (error: AxiosError) => Promise<UseRawQueryOnErrorActionType>;
+  /** Relance automatique sur erreur serveur ; désactivée par défaut */
+  retry?: UseRetryOptions;
 };
 
 export type UseRawQueryHeaders = { [key: string]: string };
@@ -90,14 +113,29 @@ export type UseRawMutationOptions = UseBaseOptions;
 
 export type UseRawMutationOptionsKeys = keyof UseRawMutationOptions;
 
-export type UseMutationOptions = Pick<UseRawMutationOptions, 'minDelay' | 'cacheDuration' | 'authToken' | 'onErrorCallback'>;
+export type UseMutationOptions = Pick<
+  UseRawMutationOptions,
+  'minDelay' | 'cacheDuration' | 'authToken' | 'onErrorCallback' | 'retry'
+>;
 
-export type UseQueryOptions<T> = Pick<UseRawQueryOptions<T>, 'fetchOnMount' | 'minDelay' | 'cacheDuration' | 'authToken' | 'headers' | 'onErrorCallback'>;
+export type UseQueryOptions<T> = Pick<
+  UseRawQueryOptions<T>,
+  'fetchOnMount' | 'minDelay' | 'cacheDuration' | 'authToken' | 'headers' | 'onErrorCallback' | 'retry'
+>;
 
 export type UseRawMutationReturn = {
   isLoading: Ref<boolean, boolean>;
   isError: Ref<boolean, boolean>;
-  send: <T>(method: 'POST' | 'PUT' | 'PATCH' | 'DELETE', url: string, body: T | undefined, headers?: UseRawQueryHeaders) => Promise<void>;
+  /** Message de la dernière erreur (null si la dernière requête a réussi) */
+  error: Ref<string | null>;
+  /** Code HTTP de la dernière erreur, null si aucune ou erreur réseau */
+  statusCode: Ref<number | null>;
+  send: <T>(
+    method: 'POST' | 'PUT' | 'PATCH' | 'DELETE',
+    url: string,
+    body: T | undefined,
+    headers?: UseRawQueryHeaders,
+  ) => Promise<void>;
   cache: ApiCacheStore;
   setOptions: (_options: Partial<UseRawMutationOptions>) => void;
 };
@@ -112,7 +150,14 @@ export type UseMutationReturn = UseRawMutationReturn & {
 export type UseRawQueryReturn<T> = {
   isLoading: ComputedRef<boolean>;
   isError: ComputedRef<boolean>;
+  /** Message de la dernière erreur (null si la dernière requête a réussi) */
+  error: Ref<string | null>;
+  /** Code HTTP de la dernière erreur, null si aucune ou erreur réseau */
+  statusCode: Ref<number | null>;
+  /** Relance la requête sans condition */
   refetch: () => Promise<T | undefined>;
+  /** Relance la requête seulement si le cache est invalide et qu'aucune requête n'est en cours */
+  refresh: () => Promise<void>;
   data: ComputedRef<T | undefined>;
   cache: ApiCacheStore;
   setOptions: (_options: Partial<UseRawQueryOptions<T>>) => void;

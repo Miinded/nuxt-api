@@ -8,7 +8,10 @@ vi.mock('axios', () => {
   };
 });
 
-const axiosMock = (await import('axios')).default as unknown as ReturnType<typeof vi.fn> & { mockResolvedValue: (v: any) => void; mockRejectedValue: (v: any) => void };
+const axiosMock = (await import('axios')).default as unknown as ReturnType<typeof vi.fn> & {
+  mockResolvedValue: (v: any) => void;
+  mockRejectedValue: (v: any) => void;
+};
 
 describe('useRawQuery', () => {
   beforeEach(() => {
@@ -19,7 +22,7 @@ describe('useRawQuery', () => {
   it('refetch récupère les données et met le cache à idle', async () => {
     axiosMock.mockResolvedValue({ data: { ok: true } });
 
-    const q = useRawQuery<{ ok: boolean}>({
+    const q = useRawQuery<{ ok: boolean }>({
       key: ['users', 1],
       url: '/api/users/1',
       fetchOnMount: false,
@@ -40,7 +43,7 @@ describe('useRawQuery', () => {
     const minDelay = 50;
     const start = Date.now();
 
-    const q = useRawQuery<{ slow: boolean}>({
+    const q = useRawQuery<{ slow: boolean }>({
       key: ['slow'],
       url: '/slow',
       fetchOnMount: false,
@@ -54,7 +57,7 @@ describe('useRawQuery', () => {
   it('fusionne headers et authToken', async () => {
     axiosMock.mockResolvedValue({ data: { ok: true } });
 
-    const q = useRawQuery<{ ok: boolean}>({
+    const q = useRawQuery<{ ok: boolean }>({
       key: ['headers'],
       url: '/h',
       fetchOnMount: false,
@@ -64,7 +67,7 @@ describe('useRawQuery', () => {
 
     await q.refetch();
     expect(axiosMock).toHaveBeenCalledTimes(1);
-    const call = axiosMock.mock.calls[0];
+    const call = axiosMock.mock.calls[0]!;
     expect(call[0]).toBe('/h');
     expect(call[1].headers['X-Custom']).toBe('1');
     expect(call[1].headers['Authorization']).toBe('Bearer token');
@@ -73,7 +76,7 @@ describe('useRawQuery', () => {
   it('met le cache en erreur et conserve data initiale en cas d’échec', async () => {
     axiosMock.mockRejectedValue({ response: { status: 500, statusText: 'Server Error' } });
 
-    const q = useRawQuery<{ ok: boolean}>({
+    const q = useRawQuery<{ ok: boolean }>({
       key: ['err'],
       url: '/err',
       fetchOnMount: false,
@@ -88,5 +91,3 @@ describe('useRawQuery', () => {
     expect(entry.data).toEqual({ ok: false });
   });
 });
-
-

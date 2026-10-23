@@ -16,14 +16,7 @@ const { data, isLoading, cache } = useRawQuery<Todo>({
   minDelay: 250,
 });
 
-const {
-  post,
-  put,
-  remove,
-  isLoading: isSaving,
-} = useMutation({
-  key: ['todo', id],
-});
+const { post, put, remove, isLoading: isSaving } = useMutation(['todo', id]);
 
 const onSave = async () => {
   await put('https://66aa4426613eced4eba83c35.mockapi.io/overview/todo/' + toValue(id), toValue(data));
@@ -46,7 +39,7 @@ const onRemove = async () => {
   <div class="bg-green-200 p-4">
     <div>TODO {{ id }}</div>
     <div v-if="isLoading">Loading...</div>
-    <div v-else class="space-y-2">
+    <div v-else-if="data" class="space-y-2">
       <div><input v-model="data.title" type="text" /></div>
       <div><textarea v-model="data.description" type="text" /></div>
       <template v-if="!isSaving">

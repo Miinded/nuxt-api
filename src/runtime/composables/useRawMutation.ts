@@ -1,15 +1,21 @@
 import { computed, ref, toValue, type Ref } from 'vue';
-import axios from 'axios';
-import type { UseRawMutationOptions, UseRawMutationOptionsKeys, UseRawMutationReturn, UseRawQueryHeaders } from '../types/api-cache.type';
-import { USE_RAW_QUERY_ERROR_REFRESH_MAX } from '../types/api-cache.type';
+import axios, { type AxiosError } from 'axios';
+import type {
+  UseRawMutationOptions,
+  UseRawMutationOptionsKeys,
+  UseRawMutationReturn,
+  UseRawQueryHeaders,
+} from '../types/api-cache.type';
+import { USE_RAW_QUERY_ERROR_REFRESH_MAX, UseRawQueryOnErrorAction } from '../types/api-cache.type';
 import { apiCacheStore } from '../stores/api-cache.store';
+import { defaultRetryDelay, describeError, isServerError, sleep } from '../utils/errors';
 
 export const useRawMutation = (_options: UseRawMutationOptions): UseRawMutationReturn => {
   const options: UseRawMutationOptions = { minDelay: 0, cacheDuration: undefined, ..._options };
   const authToken = computed(() => toValue(options.authToken ?? {}));
 
   const error: Ref<string | null> = ref(null);
-  const statusCode: Ref<number | null> = ref(null); // Ajouter une ref pour le code d'état HTTP
+  const statusCode: Ref<number | null> = ref(null);
 
   const cache = apiCacheStore();
 
@@ -18,11 +24,18 @@ export const useRawMutation = (_options: UseRawMutationOptions): UseRawMutationR
   const axiosInstance = axios.create();
 
   let errorCounts = 0;
+  let retryCount = 0;
 
-  const send = async <T>(method: 'POST' | 'PUT' | 'PATCH' | 'DELETE', url: string, body: T | undefined, headers: UseRawQueryHeaders = {}): Promise<void> => {
+  const send = async <T>(
+    method: 'POST' | 'PUT' | 'PATCH' | 'DELETE',
+    url: string,
+    body: T | undefined,
+    headers: UseRawQueryHeaders = {},
+  ): Promise<void> => {
     isLoading.value = true;
     isError.value = false;
     statusCode.value = null;
+    error.value = null;
 
     const startTime = Date.now();
 
@@ -40,7 +53,7 @@ export const useRawMutation = (_options: UseRawMutationOptions): UseRawMutationR
       if (options.minDelay && options.minDelay > 0) {
         const remainingTime = options.minDelay - (Date.now() - startTime);
         if (remainingTime > 0) {
-          await new Promise((resolve) => setTimeout(resolve, remainingTime));
+          await sleep(remainingTime);
         }
       }
 
@@ -51,32 +64,42 @@ export const useRawMutation = (_options: UseRawMutationOptions): UseRawMutationR
         cache.remove(options.key);
       }
       errorCounts = 0;
-    } catch (err: any) {
-      console.error(err);
+      retryCount = 0;
+    } catch (err: unknown) {
+      const axiosError = err as AxiosError<{ message?: string }>;
+      console.error(axiosError);
+
+      // Erreur serveur ou réseau : relance automatique avec backoff, si activée
+      if (options.retry && isServerError(axiosError) && retryCount < options.retry.max) {
+        retryCount++;
+        options.retry.onRetry?.(retryCount, axiosError);
+        await sleep((options.retry.delay ?? defaultRetryDelay)(retryCount));
+        return send(method, url, body, headers);
+      }
+
+      // Callback personnalisé (pour un 401 : renouvellement du jeton, etc.)
       if (options.onErrorCallback) {
         if (errorCounts < USE_RAW_QUERY_ERROR_REFRESH_MAX) {
           errorCounts++;
-          const action = await options.onErrorCallback(err);
+          const action = await options.onErrorCallback(axiosError);
           switch (action) {
-            case 'REFRESH':
-              await send(method, url, body, toValue(headers));
+            case UseRawQueryOnErrorAction.REFRESH:
+              return send(method, url, body, headers);
+            case UseRawQueryOnErrorAction.CANCEL:
               return;
-            case 'CANCEL':
-              return;
-            case 'NOTHING':
+            case UseRawQueryOnErrorAction.NOTHING:
               break;
           }
         } else {
           console.error(`Max error refresh call: ${errorCounts}/${USE_RAW_QUERY_ERROR_REFRESH_MAX}`);
         }
       }
-      // Gérer les erreurs HTTP et extraire le statusCode
-      if (err.response) {
-        statusCode.value = err.response.status;
-        error.value = err.response.statusText || 'Une erreur est survenue';
-      } else {
-        error.value = err.message || 'Une erreur inconnue est survenue';
-      }
+
+      const described = describeError(axiosError);
+      isError.value = true;
+      statusCode.value = described.statusCode;
+      error.value = described.message;
+      retryCount = 0;
     } finally {
       isLoading.value = false;
     }
@@ -91,6 +114,8 @@ export const useRawMutation = (_options: UseRawMutationOptions): UseRawMutationR
   return {
     isLoading,
     isError,
+    error,
+    statusCode,
     send,
     cache,
     setOptions,

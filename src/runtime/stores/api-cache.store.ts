@@ -1,20 +1,6 @@
 import { defineStore } from 'pinia';
-import { ref, toValue, type Ref, type ComputedRef } from 'vue';
-export type ApiCacheState = 'loading' | 'idle' | 'error' | 'deleted';
-
-export type ApiCacheKey = string | number | ComputedRef<string> | ComputedRef<number> | Ref<string> | Ref<number>;
-
-export type ApiCacheInvalidOptions = {
-  exact?: boolean;
-};
-
-export type ApiCache = {
-  data: any;
-  timestamp: number;
-  duration: number;
-  valid: boolean;
-  state: ApiCacheState;
-};
+import { ref, toValue, type Ref } from 'vue';
+import type { ApiCache, ApiCacheInvalidOptions, ApiCacheKey, ApiCacheState } from '../types/api-cache.type';
 
 const API_CACHE_INVALIDATE_DURATION = 30 * 1000; //30s
 const JOIN_STRING = '_:_';
@@ -35,14 +21,13 @@ export const apiCacheStore = defineStore('api-cache', () => {
     const entry = getEntry(key);
     return !!entry && entry.state === state;
   };
-  
+
   const notState = (key: ApiCacheKey[], state: ApiCacheState): boolean => {
     const entry = getEntry(key);
     return !!entry && entry.state !== state;
   };
 
   const exist = (key: ApiCacheKey[]) => notState(key, 'deleted') && !!getEntry(key);
-
 
   const isLoading = (key: ApiCacheKey[]): boolean => hasState(key, 'loading');
 
@@ -64,9 +49,9 @@ export const apiCacheStore = defineStore('api-cache', () => {
 
   const update = (
     key: ApiCacheKey[],
-    data: any,
+    data: unknown,
     state: ApiCacheState,
-    duration: number | null = null
+    duration: number | null = null,
   ): ApiCache | undefined => {
     if (!key.length) return;
 
@@ -86,7 +71,9 @@ export const apiCacheStore = defineStore('api-cache', () => {
   };
 
   const invalid = (key: ApiCacheKey[], options?: ApiCacheInvalidOptions) => {
-    setCache(key, (e) => { e.valid = false; });
+    setCache(key, (e) => {
+      e.valid = false;
+    });
 
     // invalider les enfants si exact === false
     if (!options?.exact) {
@@ -103,7 +90,9 @@ export const apiCacheStore = defineStore('api-cache', () => {
   };
 
   const remove = (key: ApiCacheKey[]) => {
-      setCache(key, (e) => { e.state = 'deleted'; });
+    setCache(key, (e) => {
+      e.state = 'deleted';
+    });
   };
 
   return {
